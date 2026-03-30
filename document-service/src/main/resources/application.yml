@@ -1,0 +1,38 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: document-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/docsdb?currentSchema=document}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: true
+  flyway:
+    enabled: true
+    default-schema: document
+    schemas: document
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:change-me-to-a-long-64-byte-secret-key-for-prod-1234567890}
+    internal-service-token: ${INTERNAL_SERVICE_TOKEN:collab-service-internal-token}
+
+logging:
+  level:
+    com.nkh.document: INFO

@@ -1,0 +1,11 @@
+CREATE SCHEMA IF NOT EXISTS auth;
+SET search_path TO auth;
+
+CREATE TABLE users (
+    id UUID PRIMARY KEY,
+    username VARCHAR(80) NOT NULL UNIQUE,
+    email VARCHAR(120) NOT NULL UNIQUE,
+    password_hash VARCHAR(200) NOT NULL,
+    role VARCHAR(30) NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL
+);

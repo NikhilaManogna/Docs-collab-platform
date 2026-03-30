@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/docsdb?currentSchema=auth}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:postgres}
+  mail:
+    host: ${MAIL_HOST:localhost}
+    port: ${MAIL_PORT:1025}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:false}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:false}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    default-schema: auth
+    schemas: auth
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  security:
+    jwt-secret: ${JWT_SECRET:change-me-to-a-long-64-byte-secret-key-for-prod-1234567890}
+  password-reset:
+    frontend-url: ${PASSWORD_RESET_URL:http://localhost:3000}
+    inbox-url: ${PASSWORD_RESET_INBOX_URL:http://localhost:8025}
+    from-address: ${PASSWORD_RESET_FROM:no-reply@docs-collab.local}

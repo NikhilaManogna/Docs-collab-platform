@@ -1,0 +1,14 @@
+.idea/
+.vscode/
+.tools/
+.DS_Store
+
+**/target/
+**/*.class
+**/*.log
+
+frontend-app/node_modules/
+frontend-app/dist/
+
+.env
+.env.*

@@ -1,0 +1,125 @@
+services:
+  frontend-app:
+    build:
+      context: .
+      dockerfile: frontend-app/Dockerfile
+    depends_on:
+      gateway-service:
+        condition: service_started
+    ports:
+      - "3000:80"
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: docsdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d docsdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7.2
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  auth-service:
+    build:
+      context: .
+      dockerfile: auth-service/Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/docsdb?currentSchema=auth
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: change-me-to-a-long-64-byte-secret-key-for-prod-1234567890
+      MAIL_HOST: ${MAIL_HOST:-mailhog}
+      MAIL_PORT: ${MAIL_PORT:-1025}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SMTP_AUTH: ${MAIL_SMTP_AUTH:-false}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-false}
+      PASSWORD_RESET_URL: ${PASSWORD_RESET_URL:-http://localhost:3000}
+      PASSWORD_RESET_INBOX_URL: ${PASSWORD_RESET_INBOX_URL:-http://localhost:8025}
+      PASSWORD_RESET_FROM: ${PASSWORD_RESET_FROM:-no-reply@docs-collab.local}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mailhog:
+        condition: service_started
+    ports:
+      - "8083:8083"
+
+  document-service:
+    build:
+      context: .
+      dockerfile: document-service/Dockerfile
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/docsdb?currentSchema=document
+      DB_USERNAME: postgres
+      DB_PASSWORD: postgres
+      JWT_SECRET: change-me-to-a-long-64-byte-secret-key-for-prod-1234567890
+      INTERNAL_SERVICE_TOKEN: collab-service-internal-token
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+
+  collaboration-service:
+    build:
+      context: .
+      dockerfile: collaboration-service/Dockerfile
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      DOCUMENT_SERVICE_URL: http://document-service:8081
+      JWT_SECRET: change-me-to-a-long-64-byte-secret-key-for-prod-1234567890
+      INTERNAL_SERVICE_TOKEN: collab-service-internal-token
+      INSTANCE_ID: collaboration-1
+    depends_on:
+      redis:
+        condition: service_healthy
+      document-service:
+        condition: service_started
+    ports:
+      - "8082:8082"
+
+  gateway-service:
+    build:
+      context: .
+      dockerfile: gateway-service/Dockerfile
+    environment:
+      AUTH_SERVICE_URL: http://auth-service:8083
+      DOCUMENT_SERVICE_URL: http://document-service:8081
+      COLLABORATION_SERVICE_URL: http://collaboration-service:8082
+      COLLABORATION_WS_URL: ws://collaboration-service:8082
+    depends_on:
+      auth-service:
+        condition: service_started
+      document-service:
+        condition: service_started
+      collaboration-service:
+        condition: service_started
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:

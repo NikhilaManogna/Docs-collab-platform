@@ -1,0 +1,248 @@
+:root {
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  color: #13232f;
+  background:
+    radial-gradient(circle at top left, rgba(255, 191, 128, 0.35), transparent 35%),
+    linear-gradient(135deg, #f4efe6 0%, #d9e7ef 52%, #f8fbff 100%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button {
+  border: none;
+  border-radius: 14px;
+  padding: 0.8rem 1.1rem;
+  background: #0f6d77;
+  color: white;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid rgba(19, 35, 47, 0.15);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.app-shell {
+  padding: 1.5rem;
+}
+
+.topbar,
+.workspace,
+.editor-layout,
+.toolbar-actions,
+.sidebar-header,
+.editor-toolbar,
+.topbar-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.topbar,
+.sidebar-header,
+.editor-toolbar {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.workspace {
+  align-items: flex-start;
+}
+
+.sidebar {
+  width: 320px;
+  flex-shrink: 0;
+}
+
+.editor-layout {
+  flex: 1;
+  align-items: flex-start;
+}
+
+.editor-card {
+  flex: 1;
+}
+
+.side-panels {
+  width: 320px;
+  display: grid;
+  gap: 1rem;
+}
+
+.card {
+  background: rgba(255, 255, 255, 0.76);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 24px;
+  padding: 1.25rem;
+  box-shadow: 0 22px 55px rgba(27, 53, 72, 0.12);
+}
+
+.auth-card {
+  max-width: 520px;
+  margin: 6rem auto;
+}
+
+.eyebrow {
+  margin: 0 0 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.72rem;
+  color: #0f6d77;
+}
+
+.auth-header h1 {
+  margin-bottom: 0.35rem;
+}
+
+.stack {
+  display: grid;
+  gap: 1rem;
+}
+
+.document-list,
+.info-list {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.create-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.share-form {
+  display: grid;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+
+.document-item,
+.version-item {
+  text-align: left;
+  background: rgba(230, 239, 244, 0.72);
+  color: #13232f;
+}
+
+.document-item.selected {
+  outline: 2px solid #0f6d77;
+  background: rgba(201, 235, 238, 0.95);
+}
+
+.document-item,
+.version-item,
+.info-row {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.title-input {
+  font-size: 1.6rem;
+  font-weight: 700;
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.editor-textarea {
+  min-height: 68vh;
+  resize: vertical;
+  line-height: 1.6;
+}
+
+.editor-meta,
+.presence-list,
+.topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+}
+
+.presence-pill {
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: #f4c977;
+  color: #412b00;
+}
+
+.muted,
+.hint,
+.editor-meta,
+.document-item small,
+.document-item span {
+  color: #4e6270;
+}
+
+.banner {
+  margin: 1rem 0;
+  padding: 0.9rem 1rem;
+  border-radius: 16px;
+  background: rgba(15, 109, 119, 0.12);
+  color: #0f4b52;
+}
+
+.minimal-topbar {
+  justify-content: flex-end;
+  margin-bottom: 1rem;
+}
+
+.editor-empty {
+  min-height: 70vh;
+  display: grid;
+  place-items: center;
+  text-align: center;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.auth-switch {
+  margin: 1rem 0 0;
+}
+
+.text-button {
+  background: transparent;
+  color: #0f6d77;
+  padding: 0;
+  border-radius: 0;
+}
+
+@media (max-width: 1100px) {
+  .workspace,
+  .editor-layout,
+  .topbar {
+    flex-direction: column;
+  }
+
+  .sidebar,
+  .side-panels {
+    width: 100%;
+  }
+}

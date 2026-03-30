@@ -1,0 +1,24 @@
+server:
+  port: 8082
+
+spring:
+  application:
+    name: collaboration-service
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+app:
+  instance-id: ${INSTANCE_ID:${random.uuid}}
+  services:
+    document-base-url: ${DOCUMENT_SERVICE_URL:http://localhost:8081}
+  security:
+    jwt-secret: ${JWT_SECRET:change-me-to-a-long-64-byte-secret-key-for-prod-1234567890}
+    internal-service-token: ${INTERNAL_SERVICE_TOKEN:collab-service-internal-token}

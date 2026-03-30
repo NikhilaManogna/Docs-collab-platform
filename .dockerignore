@@ -1,0 +1,7 @@
+target
+.idea
+.git
+**/target
+**/.DS_Store
+frontend-app/node_modules
+frontend-app/dist
