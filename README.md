@@ -319,13 +319,9 @@ npm run build
 npm run dev
 ```
 
-## Demo Script
-
-You can also use demo.ps1 for a quick API smoke flow.
-
 ## Scaling Strategy
 
-- gateway and services are stateless at the HTTP layer
+- Gateway and services are stateless at the HTTP layer
 - PostgreSQL stores durable auth and document state
 - Redis distributes collaboration events across instances
 - collaboration state is designed for horizontal fanout
