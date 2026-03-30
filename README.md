@@ -2,15 +2,6 @@
 
 Real-time collaborative document editing platform built with Java, Spring Boot, WebSockets, Redis, PostgreSQL, Docker, and a React browser client. The system supports concurrent editing, presence, version history, sharing, JWT-based authentication, and password reset flows.
 
-## Why This Project
-
-This project was built to demonstrate backend system design for a Google Docs style collaboration workflow:
-
-- low-latency document updates over WebSockets
-- conflict-safe collaborative editing
-- horizontal scaling through Redis pub/sub
-- persistent document and auth state in PostgreSQL
-- clear separation between gateway, auth, document, and collaboration responsibilities
 
 ## Architecture Overview
 
@@ -102,7 +93,6 @@ flowchart TD
 - Spring WebSocket + STOMP
 - Redis 7
 - PostgreSQL 16
-- Flyway
 - React + Vite + TypeScript
 - Docker Compose
 - JUnit + Spring Boot Test
@@ -116,23 +106,10 @@ flowchart TD
 - JWT-based authentication
 - Duplicate username and email validation
 - Password reset flow
-- Docker-first local development
-- Redis-based scaling path for collaboration fanout
 
 ## Collaboration Model
 
 The current live sync path uses a durable full-document replacement operation for stability at demo time, while the service still retains CRDT-oriented internal structures from the original collaboration design.
-
-Why this choice was made:
-
-- it avoids client/server drift during rapid edits
-- it keeps the browser experience reliable for portfolio demos
-- it is easier to explain during interviews than a partially stable transform pipeline
-
-Tradeoff:
-
-- this is not a full Google Docs rich-text engine
-- it is a strong collaborative text backend demo with clear scaling boundaries and sensible engineering tradeoffs
 
 ## Data Model
 
@@ -286,19 +263,10 @@ docker compose up --build
 7. Set a new password
 8. Login again with the new password
 
-### Persistence
-
-Normal stop and restart should preserve users and documents:
+### Development withh Docker
 
 ```powershell
-docker compose down
 docker compose up --build
-```
-
-Only use this when you intentionally want a full reset:
-
-```powershell
-docker compose down --volumes
 ```
 
 ## Local Development Without Docker
